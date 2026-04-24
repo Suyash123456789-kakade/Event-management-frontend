@@ -1,0 +1,153 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: var(--bg-card);
+  width: 100%;
+  max-width: 400px;
+  border-radius: 16px;
+  padding: 30px;
+  position: relative;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--border-color);
+}
+
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.close-btn:hover {
+  color: var(--text-main);
+}
+
+.modal-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.modal-header h2 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+.modal-header p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0 15px;
+  height: 50px;
+  transition: border-color 0.3s;
+}
+
+.input-group:focus-within {
+  border-color: var(--primary-red);
+  box-shadow: 0 0 0 1px var(--primary-red);
+}
+
+.input-icon {
+  color: var(--text-muted);
+  margin-right: 10px;
+}
+
+.country-code {
+  color: var(--text-main);
+  font-weight: 500;
+  margin-right: 10px;
+  border-right: 1px solid var(--border-color);
+  padding-right: 10px;
+}
+
+.input-group input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  outline: none;
+  font-size: 1rem;
+}
+
+.input-group input::placeholder {
+  color: var(--text-muted);
+}
+
+.otp-group {
+  justify-content: center;
+}
+
+.otp-input {
+  text-align: center;
+  letter-spacing: 2px;
+  font-size: 1.2rem !important;
+}
+
+.full-width {
+  width: 100%;
+  height: 50px;
+  font-size: 1rem;
+}
+
+.terms-text, .resend-text {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 10px;
+}
+
+.terms-text a, .resend-text button {
+  color: var(--primary-red);
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.error-msg {
+  color: #ef4444;
+  font-size: 0.85rem;
+  text-align: center;
+  margin-top: -10px;
+}
+
+.otp-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.shield-icon {
+  color: var(--primary-red);
+  margin-bottom: 15px;
+}
