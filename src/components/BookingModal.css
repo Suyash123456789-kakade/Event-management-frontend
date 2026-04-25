@@ -1,0 +1,187 @@
+.booking-modal {
+  max-width: 500px;
+  width: 90%;
+  padding: 30px;
+}
+
+.seat-selection-step h2, .payment-step h2 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.screen-indicator {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #888;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.screen-line {
+  height: 5px;
+  background: linear-gradient(to right, transparent, #ccc, transparent);
+  margin-bottom: 30px;
+  border-radius: 5px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.seat-matrix {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 30px;
+  align-items: center;
+}
+
+.seat-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.row-label {
+  width: 20px;
+  font-weight: bold;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.seat-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #ccc;
+  border-radius: 5px 5px 2px 2px;
+  background: white;
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: #555;
+  transition: all 0.2s;
+}
+
+.seat-btn:hover {
+  border-color: #f84464;
+}
+
+.seat-btn.selected {
+  background: #f84464;
+  color: white;
+  border-color: #f84464;
+}
+
+.seat-legend {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.seat-box {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px 4px 2px 2px;
+  border: 1px solid #ccc;
+}
+
+.seat-box.available { background: white; }
+.seat-box.selected { background: #f84464; border-color: #f84464; }
+
+.booking-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+}
+
+.price-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.price-info span {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.price-info strong {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.payment-step {
+  text-align: center;
+}
+
+.payment-amount {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #f84464;
+  margin-bottom: 20px;
+}
+
+.qr-container {
+  background: #f9f9f9;
+  padding: 30px;
+  border-radius: 12px;
+  display: inline-block;
+  margin-bottom: 20px;
+  border: 1px solid #eee;
+}
+
+.qr-icon {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.upi-info {
+  margin-bottom: 25px;
+}
+
+.upi-info label {
+  display: block;
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.upi-box {
+  background: #fff;
+  border: 1px dashed #ccc;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.success-step {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.success-icon {
+  width: 80px;
+  height: 80px;
+  background: #4caf50;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  margin: 0 auto 20px;
+}
+
+.redirect-text {
+  font-size: 0.9rem;
+  color: #888;
+  margin-top: 20px;
+}

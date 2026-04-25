@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Search, ChevronDown, Menu, User } from 'lucide-react';
+import { Search, ChevronDown, Menu, User, LogOut, PlusCircle, Ticket } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 
-const Navbar = ({ onSignInClick, user }) => {
+const Navbar = ({ onSignInClick, user, onLogout }) => {
   return (
     <nav className="navbar">
       <div className="container nav-container">
@@ -24,9 +24,22 @@ const Navbar = ({ onSignInClick, user }) => {
           </div>
           
           {user ? (
-            <div className="user-profile animate-fade-in">
-              <User size={18} />
-              <span>Hi, {user.phone}</span>
+            <div className="user-profile animate-fade-in" style={{display: 'flex', gap: '15px', alignItems: 'center'}}>
+              <Link to="/add-event" className="add-event-btn" style={{display: 'flex', alignItems: 'center', gap: '5px', textDecoration: 'none', color: '#f84464', fontWeight: '500'}}>
+                <PlusCircle size={18} />
+                <span>Add Event</span>
+              </Link>
+              <Link to="/my-bookings" className="my-tickets-btn" style={{display: 'flex', alignItems: 'center', gap: '5px', textDecoration: 'none', color: '#333', fontWeight: '500'}}>
+                <Ticket size={18} />
+                <span>Tickets</span>
+              </Link>
+              <div style={{display: 'flex', alignItems: 'center', gap: '5px'}}>
+                <User size={18} />
+                <span style={{fontSize: '0.9rem'}}>{user.email ? user.email.split('@')[0] : 'User'}</span>
+              </div>
+              <button onClick={onLogout} style={{background: 'none', border: 'none', cursor: 'pointer', color: '#333', display: 'flex', alignItems: 'center'}}>
+                <LogOut size={18} />
+              </button>
             </div>
           ) : (
             <button className="btn-primary sign-in-btn" onClick={onSignInClick}>

@@ -1,16 +1,50 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getItemById } from '../data';
+import BookingModal from '../components/BookingModal';
 import './EventDetails.css';
 
 const EventDetails = ({ onBookClick }) => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const item = getItemById(id);
+  const [item, setItem] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    
+    const fetchEvent = async () => {
+      try {
+        const res = await fetch(`/api/events/${id}`);
+        if (!res.ok) throw new Error('Event not found');
+        const data = await res.json();
+        setItem(data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchEvent();
   }, [id]);
+
+  const handleBookClick = () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsBookingModalOpen(true);
+    } else {
+      onBookClick(); // Open Auth Modal
+    }
+  };
+
+  const handleBookingComplete = () => {
+    navigate('/my-bookings');
+  };
+
+  if (loading) {
+    return <div className="container" style={{padding: '50px 0', textAlign: 'center'}}>Loading event details...</div>;
+  }
 
   if (!item) {
     return (
@@ -38,7 +72,7 @@ const EventDetails = ({ onBookClick }) => {
               <span className="tag">{item.genre}</span>
               <span className="tag">{item.duration}</span>
             </div>
-            <button className="btn-primary book-btn" onClick={onBookClick}>
+            <button className="btn-primary book-btn" onClick={handleBookClick}>
               Book Tickets
             </button>
           </div>
@@ -55,7 +89,7 @@ const EventDetails = ({ onBookClick }) => {
         <div className="section">
           <h2>Cast & Crew</h2>
           <div className="cast-grid">
-            {item.cast.map((actor, idx) => (
+            {item.cast && item.cast.map((actor, idx) => (
               <div key={idx} className="cast-card">
                 <div className="cast-avatar">
                   {actor.charAt(0)}
@@ -66,6 +100,13 @@ const EventDetails = ({ onBookClick }) => {
           </div>
         </div>
       </div>
+
+      <BookingModal 
+        isOpen={isBookingModalOpen}
+        onClose={() => setIsBookingModalOpen(false)}
+        event={item}
+        onBookingComplete={handleBookingComplete}
+      />
     </div>
   );
 };

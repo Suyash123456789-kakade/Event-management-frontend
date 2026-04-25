@@ -1,12 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { movies } from '../data';
 import './HeroCarousel.css';
 
 const HeroCarousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [movies, setMovies] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const res = await fetch('/api/events');
+        const data = await res.json();
+        // Use first 3 events as carousel
+        setMovies(data.slice(0, 3));
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchMovies();
+  }, []);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev === movies.length - 1 ? 0 : prev + 1));
@@ -17,11 +31,14 @@ const HeroCarousel = () => {
   };
 
   useEffect(() => {
+    if (movies.length === 0) return;
     const interval = setInterval(() => {
       nextSlide();
     }, 5000);
     return () => clearInterval(interval);
-  }, [currentSlide]);
+  }, [currentSlide, movies.length]);
+
+  if (movies.length === 0) return null;
 
   return (
     <div className="carousel-container animate-fade-in">

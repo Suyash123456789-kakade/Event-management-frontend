@@ -1,38 +1,73 @@
 import React, { useState } from 'react';
-import { X, Smartphone, ShieldCheck } from 'lucide-react';
+import { X, Mail, ShieldCheck } from 'lucide-react';
 import './AuthModal.css';
 
 const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
-  const [step, setStep] = useState('phone'); // 'phone' or 'otp'
-  const [phone, setPhone] = useState('');
+  const [step, setStep] = useState('email'); // 'email' or 'otp'
+  const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   if (!isOpen) return null;
 
-  const handlePhoneSubmit = (e) => {
+  const handleEmailSubmit = async (e) => {
     e.preventDefault();
-    if (phone.length < 10) {
-      setError('Please enter a valid 10-digit mobile number');
+    if (!email.includes('@')) {
+      setError('Please enter a valid email address');
       return;
     }
     setError('');
-    setStep('otp');
+    setLoading(true);
+
+    try {
+      const res = await fetch('/api/auth/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      
+      if (!res.ok) throw new Error('Failed to send OTP');
+      
+      setStep('otp');
+    } catch (err) {
+      setError('Error sending OTP. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleOtpSubmit = (e) => {
+  const handleOtpSubmit = async (e) => {
     e.preventDefault();
-    if (otp === '123456') {
-      onLoginSuccess({ phone });
+    setError('');
+    setLoading(true);
+
+    try {
+      const res = await fetch('/api/auth/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, otp })
+      });
+      
+      const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.error || 'Invalid OTP');
+      }
+
+      localStorage.setItem('token', data.token);
+      onLoginSuccess(data.user);
       handleClose();
-    } else {
-      setError('Invalid OTP. Please use 123456 for demo.');
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleClose = () => {
-    setStep('phone');
-    setPhone('');
+    setStep('email');
+    setEmail('');
     setOtp('');
     setError('');
     onClose();
@@ -50,21 +85,24 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
           <p>Sign in to unlock the best experience.</p>
         </div>
 
-        {step === 'phone' ? (
-          <form className="auth-form" onSubmit={handlePhoneSubmit}>
+        {step === 'email' ? (
+          <form className="auth-form" onSubmit={handleEmailSubmit}>
             <div className="input-group">
-              <Smartphone className="input-icon" size={20} />
-              <span className="country-code">+91</span>
+              <Mail className="input-icon" size={20} style={{marginLeft: '10px'}}/>
               <input
-                type="tel"
-                placeholder="Continue with mobile number"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                style={{paddingLeft: '40px'}}
+                type="email"
+                placeholder="Continue with Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 autoFocus
+                disabled={loading}
               />
             </div>
             {error && <div className="error-msg">{error}</div>}
-            <button type="submit" className="btn-primary full-width">Continue</button>
+            <button type="submit" className="btn-primary full-width" disabled={loading}>
+              {loading ? 'Sending...' : 'Continue'}
+            </button>
             <div className="terms-text">
               I agree to the <a href="#">Terms & Conditions</a> & <a href="#">Privacy Policy</a>
             </div>
@@ -73,22 +111,25 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
           <form className="auth-form" onSubmit={handleOtpSubmit}>
             <div className="otp-info">
               <ShieldCheck size={40} className="shield-icon" />
-              <p>We've sent an OTP to +91 {phone}</p>
+              <p>We've sent an OTP to {email}</p>
             </div>
             <div className="input-group otp-group">
               <input
                 type="text"
-                placeholder="Enter 6-digit OTP (Use 123456)"
+                placeholder="Enter 6-digit OTP (Check console)"
                 value={otp}
                 onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
                 autoFocus
                 className="otp-input"
+                disabled={loading}
               />
             </div>
             {error && <div className="error-msg">{error}</div>}
-            <button type="submit" className="btn-primary full-width">Verify & Login</button>
+            <button type="submit" className="btn-primary full-width" disabled={loading}>
+              {loading ? 'Verifying...' : 'Verify & Login'}
+            </button>
             <div className="resend-text">
-              Didn't receive it? <button type="button" onClick={() => setStep('phone')}>Change Number</button>
+              Didn't receive it? <button type="button" onClick={() => setStep('email')}>Change Email</button>
             </div>
           </form>
         )}
